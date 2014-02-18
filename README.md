@@ -3,7 +3,7 @@
 ## Features
 reduce-fsm provides a simple way to specify clojure [finite state machines](http://en.wikipedia.org/wiki/Finite-state_machine), it allows you to:
 
-- Define define state machines that accumulate values (in the same was that reduce does)
+- Define define state machines that accumulate values (in the same way that reduce does)
 - Create lazy sequences from state machines
 - Perform stateful filtering with clojures filter/remove functions
 - Visualize the resulting state machines with graphviz
@@ -51,7 +51,7 @@ The following example counts the number of times "ab" occurs in a sequence.
 (map (partial count-ab 0) ["abaaabc" "aaacb" "bbbcab"])
 ;; returns => (2 0 1)
 
-(show-fsm count-ab)
+(fsm/show-fsm count-ab)
 ;; displays the fsm diagram below
 
 ```
@@ -104,7 +104,7 @@ adds the unexpected event to the output sequence.
 ```clojure
 (defn emit-evt [val evt] evt)
 
-(defsm-seq log-search
+(fsm/defsm-seq log-search
   [[:start
     #".*event a" -> :found-a]
    [:found-a
@@ -125,7 +125,7 @@ adds the unexpected event to the output sequence.
 
 ;; returns => ("5 event c" "5 event c")
 
-(show-fsm log-search)
+(fsm/show-fsm log-search)
 ;; displays the image below
 
 ```
@@ -140,7 +140,7 @@ For each event the filter will return the pass value of the state it is in after
 The following example suppresses values from the time a 3 is encountered until we see a 6.
 
 ```clojure
-(defsm-filter sample-filter
+(fsm/defsm-filter sample-filter
   [[:initial
     3 -> :suppressing]
    [:suppressing {:pass false}
@@ -150,7 +150,7 @@ The following example suppresses values from the time a 3 is encountered until w
 (filter (sample-filter) [1 2 3 4 5 1 2 6 1 2])
 ;; returns => (1 2 6 1 2)
 
-(show-fsm sample-filter)
+(fsm/show-fsm sample-filter)
 ;; displays the diagram below
 ```
 
